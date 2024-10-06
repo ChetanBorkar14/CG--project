@@ -109,7 +109,7 @@ void drawTree(float x, float y) {
     glColor3f(0.5f, 0.35f, 0.05f);
     drawRectangle(x + TREE_WIDTH / 4, y, TREE_WIDTH / 2, TREE_HEIGHT / 3);
 
-    glColor3f(0.0f, 0.5f, 0.0f); // Dark green
+    glColor3f(0.0f, 0.5f, 0.0f); 
     glBegin(GL_TRIANGLES);
     glVertex2f(x, y + TREE_HEIGHT / 3);
     glVertex2f(x + TREE_WIDTH / 2, y + TREE_HEIGHT);
@@ -117,16 +117,14 @@ void drawTree(float x, float y) {
     glEnd();
 }
 
-// Function to draw an antenna (connected to building)
 void drawAntenna(float x, float y, float buildingHeight) {
     glBegin(GL_LINES);
-    glColor3f(0.5f, 0.5f, 0.5f); // Gray  
-    glVertex2f(x, y); // Start from the top of the building
-    glVertex2f(x, y + 0.2f); // Extend 0.2 units above the building
+    glColor3f(0.5f, 0.5f, 0.5f);   
+    glVertex2f(x, y);
+    glVertex2f(x, y + 0.2f);
     glEnd();
 }
-
-// Function to update the planes' position and trigger building collapse  
+  
 void updatePlanes(float deltaTime) {
     if (plane1.x + 0.2f < building1.x) {
         plane1.x += PLANE_SPEED * deltaTime;
@@ -145,7 +143,6 @@ void updatePlanes(float deltaTime) {
     }
 }
 
-// Function to collapse the buildings gradually  
 void collapseBuildings(float deltaTime) {
     if (building1.collapsed && building1.height > BUILDING_MIN_HEIGHT) {
         building1.height -= COLLAPSE_SPEED * deltaTime;
@@ -156,46 +153,36 @@ void collapseBuildings(float deltaTime) {
     }
 }
 
-// Function to check if the animation is complete
 bool isAnimationComplete() {
     return (plane1.crashed && plane2.crashed &&
         building1.height <= BUILDING_MIN_HEIGHT &&
         building2.height <= BUILDING_MIN_HEIGHT);
 }
 
-// Function to draw the scene  
 void drawScene() {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    // Draw background (sky and ground)  
     drawBackground();
 
-    // Draw building 1 (collapses if hit by plane)  
-    glColor3f(0.7f, 0.7f, 0.7f); // Uniform building color  
+    glColor3f(0.7f, 0.7f, 0.7f); 
     drawRectangle(building1.x, -0.5f, BUILDING_WIDTH, building1.height);
 
-    // Draw building 2 (collapses if hit by plane)  
-    glColor3f(0.7f, 0.7f, 0.7f); // Uniform building color  
+    glColor3f(0.7f, 0.7f, 0.7f);  
     drawRectangle(building2.x, -0.5f, BUILDING_WIDTH, building2.height);
 
-    // Draw antenna on building 2 (connected to the building)
     drawAntenna(building2.x + BUILDING_WIDTH / 2, -0.5f + building2.height, building2.height);
 
-    // Draw plane 1  
     if (!plane1.crashed) {
-        drawPlane(plane1.x, 0.0f, 0.4f); // Plane 1 with a 3D scaling effect  
+        drawPlane(plane1.x, 0.0f, 0.4f);  
     }
 
-    // Draw plane 2  
     if (!plane2.crashed) {
-        drawPlane(plane2.x, -0.2f, 0.4f); // Plane 2 with a 3D scaling effect  
+        drawPlane(plane2.x, -0.2f, 0.4f);
     }
-
-    // Draw clouds  
+ 
     drawCloud(cloud1.x, cloud1.y);
     drawCloud(cloud2.x, cloud2.y);
 
-    // Draw trees  
     drawTree(tree1.x, tree1.y);
     drawTree(tree2.x, tree2.y);
 
@@ -203,12 +190,10 @@ void drawScene() {
 }
 
 int main() {
-    // Initialize GLFW  
     if (!glfwInit()) {
         return -1;
     }
 
-    // Create window  
     GLFWwindow* window = glfwCreateWindow(1920, 1080, "Repeating Plane Crash Educational Animation", NULL, NULL);
     if (!window) {
         glfwTerminate();
@@ -217,10 +202,8 @@ int main() {
 
     glfwMakeContextCurrent(window);
 
-    // Set the clear color (sky blue)  
     glClearColor(0.529f, 0.808f, 0.922f, 1.0f);
 
-    // Set up the viewport to handle window resizing
     glViewport(0, 0, 1920, 1080);
     glfwSetWindowSizeCallback(window, [](GLFWwindow*, int width, int height) {
         glViewport(0, 0, width, height);
@@ -232,44 +215,34 @@ int main() {
 
     initializeScene();
 
-    // Main loop  
     while (!glfwWindowShouldClose(window)) {
-        // Calculate delta time  
         float currentTime = glfwGetTime();
         float deltaTime = currentTime - lastTime;
         lastTime = currentTime;
 
         if (!isResetting) {
-            // Update plane positions and check for crashes  
             updatePlanes(deltaTime);
 
-            // Collapse buildings if planes crash into them  
             collapseBuildings(deltaTime);
 
-            // Check if animation is complete
             if (isAnimationComplete()) {
                 isResetting = true;
                 resetTimer = 0.0f;
             }
         }
         else {
-            // Count down the reset timer
             resetTimer += deltaTime;
             if (resetTimer >= RESET_DELAY) {
-                // Reset the scene
                 initializeScene();
                 isResetting = false;
             }
         }
 
-        // Render the scene  
         drawScene();
 
-        // Poll events  
         glfwPollEvents();
 
-        // Cap the frame rate (optional)
-        std::this_thread::sleep_for(std::chrono::milliseconds(16)); // ~60 FPS
+        std::this_thread::sleep_for(std::chrono::milliseconds(16)); 
     }
 
     glfwTerminate();
