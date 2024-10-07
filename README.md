@@ -20,10 +20,6 @@ Before running the project, ensure that the following tools and libraries are in
 3. **OpenGL**
    - OpenGL comes pre-installed with Visual Studio as part of the system graphics drivers, but make sure your machine supports OpenGL.
 
-4. **GLEW (optional)**
-   - GLEW may be required for some OpenGL functionalities, though this code primarily uses core OpenGL functions that Visual Studio supports.
-   - Download GLEW from: https://glew.sourceforge.net/
-
 ## Project Setup in Visual Studio 2022
 
 ### Step 1: Create a New Project
@@ -51,19 +47,12 @@ Before running the project, ensure that the following tools and libraries are in
      glfw3.lib
      opengl32.lib
      ```
-
-#### Setting Up GLEW (if required)
-1. Download GLEW: [GLEW Download](https://glew.sourceforge.net/)
-2. Unzip the GLEW archive.
-3. Add GLEW's **include** and **lib** directories to your project as done with GLFW.
-4. Under **Linker** -> **Input** -> **Additional Dependencies**, add:
-
    
 ### Step 4: Build Configuration
 1. Right-click on your project in Solution Explorer and go to **Properties**.
 2. Under **Configuration Properties** -> **C/C++** -> **General**, add the `include` directory of GLFW to **Additional Include Directories**.
 3. Under **Linker** -> **General**, add the `lib` directory to **Additional Library Directories**.
-4. Under **Linker** -> **Input**, add `glfw3.lib`, `opengl32.lib` (and `glew32.lib` if using GLEW) to **Additional Dependencies**.
+4. Under **Linker** -> **Input**, add `glfw3.lib`, `opengl32.lib` to **Additional Dependencies**.
 
 ### Step 5: Build and Run
 1. Build the project by selecting **Build** -> **Build Solution** or pressing `Ctrl+Shift+B`.
@@ -85,6 +74,11 @@ Make sure that the GLFW include directory is added correctly under **VC++ Direct
 
 - **Linking Errors**  
 Ensure that the GLFW and OpenGL libraries are correctly linked under **Linker** -> **Input**.
+
+
+## Output
+![Screenshot 2024-10-07 094327](https://github.com/user-attachments/assets/3efb44e3-e408-49e4-96d9-642ddb81eeac)
+
 
 ---
 
